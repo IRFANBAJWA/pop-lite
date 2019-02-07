@@ -30,7 +30,7 @@ if (!class_exists('post_type_popup')) {
         public function __construct() {
             // register actions
             add_action('init', array(&$this, 'popup_init'));
-              add_shortcode( 'medewerkers', 'display_custom_post_type' );
+            add_action('admin_init',array(&$this, 'psp_add_role_caps'),999);
         }
 
         /**
@@ -70,7 +70,8 @@ if (!class_exists('post_type_popup')) {
                 'publicly_queryable' => true,
                 'exclude_from_search' => true,
                 'hierarchical' => false,
-                'rewrite' => true,
+                'rewrite' => true,'capability_type'     => array('popup','popups'),
+                        'map_meta_cap'        => true,
                 'query_var' => true,
                 'supports' => array('title', 'editor', 'thumbnail','excerpt'),
                 'has_archive' => true,
@@ -81,34 +82,34 @@ if (!class_exists('post_type_popup')) {
 
 
 
+  
+    function psp_add_role_caps() {
 
+        // Add the roles you'd like to administer the custom post types
+        $roles = array('editor','administrator');
+        
+        // Loop through each role and assign capabilities
+        foreach($roles as $the_role) { 
 
-   public function display_custom_post_type(){
-        $args = array(
-            'post_type' => 'popup',
-            'posts_per_page' => '10',
-            'post_status' => 'publish',
-            'post_id' => null,
-        );
-
-        $string = '';
-        $query = new WP_Query( $args );
-        if( $query->have_posts() ){
-            $string .= '<ul>';
-            while( $query->have_posts() ){
-                $query->the_post();
-                $string .= '<li>' . get_the_title() . '</li>';
-                $meta = get_post_meta(get_the_id(), '');
-
-            }
-            $string .= '</ul>';
+             $role = get_role($the_role);
+            
+                 $role->add_cap( 'read' );
+                 $role->add_cap( 'read_popup');
+                 $role->add_cap( 'read_private_popups' );
+                 $role->add_cap( 'edit_popup' );
+                 $role->add_cap( 'edit_popups' );
+                 $role->add_cap( 'edit_others_popups' );
+                 $role->add_cap( 'edit_published_popups' );
+                 $role->add_cap( 'publish_popups' );
+                 $role->add_cap( 'delete_others_popups' );
+                 $role->add_cap( 'delete_private_popups' );
+                 $role->add_cap( 'delete_published_popups' );
+        
         }
-        wp_reset_postdata();
-        return $string;
-    }
+
     }
 
-   
+   }
 
     // END class
 }

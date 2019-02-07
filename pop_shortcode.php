@@ -41,7 +41,7 @@ if (!class_exists('popup_shortcode')) {
 		else:
 			$img = $img;
 		endif;
-		echo '<div class="bg-popup"><div id="tpopup"> <a href="'.$post_excerpt.'" target="_blank"> <img src="'.$img.'" class="lazyloading" data-was-processed="true"> </a><div id="tclose">X</div></div></div>';
+		echo '<div class="bg-popup" id="bgpop"><div id="tpopup"> <a href="'.$post_excerpt.'" target="_blank"> <img src="'.$img.'" class="lazyloading" data-was-processed="true"> </a><div id="tclose">X</div></div></div>';
 
 	}
     }
